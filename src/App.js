@@ -5,12 +5,11 @@ import { FaUserPlus, FaMedal } from "react-icons/fa";
 function App() {
   const [users, setUsers] = useState([]);
   const [newName, setNewName] = useState("");
-  const [selectedUser, setSelectedUser] = useState("");
+  const [selectedUserId, setSelectedUserId] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
-  const backend = "https://leaderboard-1-0jek.onrender.com/api"; // ✅ live Render backend
-
+  const backend = "https://leaderboard-1-0jek.onrender.com/api"; // ✅ LIVE backend
 
   useEffect(() => {
     fetchUsers();
@@ -20,7 +19,7 @@ function App() {
     try {
       const res = await axios.get(`${backend}/users`);
       setUsers(res.data);
-      if (res.data.length > 0) setSelectedUser(res.data[0].name);
+      if (res.data.length > 0) setSelectedUserId(res.data[0].id);
     } catch (err) {
       setError("⚠️ Failed to load users. Is backend running?");
     }
@@ -41,8 +40,7 @@ function App() {
 
   const claimPoints = async () => {
     try {
-      const user = users.find((u) => u.name === selectedUser);
-      const res = await axios.post(`${backend}/users/${user.id}/claim`);
+      const res = await axios.post(`${backend}/users/${selectedUserId}/claim`);
       setMessage(`🎉 ${res.data.name} now has ${res.data.totalPoints} points!`);
       setError("");
       fetchUsers();
@@ -77,12 +75,12 @@ function App() {
         {/* Select User and Claim */}
         <div className="flex mb-4">
           <select
-            value={selectedUser}
-            onChange={(e) => setSelectedUser(e.target.value)}
+            value={selectedUserId}
+            onChange={(e) => setSelectedUserId(e.target.value)}
             className="flex-1 border border-gray-300 rounded-l-lg px-4 py-2 text-gray-700"
           >
             {users.map((user) => (
-              <option key={user.id} value={user.name}>
+              <option key={user.id} value={user.id}>
                 {user.name}
               </option>
             ))}
