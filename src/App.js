@@ -52,20 +52,20 @@ function App() {
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-50 to-green-100 p-6 relative">
 
-      {/* ✅ LOGO + TopPointers OUTSIDE BOX - TOP LEFT */}
+   
       <div className="absolute top-6 left-6 flex items-center gap-2 z-10">
         <img src="/logo1.png" alt="Logo" className="h-10 w-10" />
         <span className="text-2xl font-bold text-gray-800">TopPointers</span>
       </div>
 
-      {/* MAIN CARD BOX */}
+
       <div className="bg-white mt-20 p-8 rounded-3xl shadow-2xl w-full max-w-xl mx-auto border border-gray-200">
-        {/* Centered Title */}
+
         <h1 className="text-4xl font-extrabold text-center text-indigo-600 mb-8 flex items-center justify-center gap-2">
           <FaMedal /> Leaderboard
         </h1>
 
-        {/* Add User */}
+      
         <div className="flex mb-4">
           <input
             value={newName}
@@ -81,7 +81,6 @@ function App() {
           </button>
         </div>
 
-        {/* Select User and Claim */}
         <div className="flex mb-4">
           <select
             value={selectedUserId}
@@ -102,7 +101,7 @@ function App() {
           </button>
         </div>
 
-        {/* Messages */}
+      
         {message && (
           <div className="bg-green-100 text-green-800 px-4 py-2 rounded mb-4 text-sm shadow-inner font-medium">
             {message}
@@ -114,7 +113,7 @@ function App() {
           </div>
         )}
 
-        {/* Leaderboard */}
+
         <div>
           <h2 className="text-2xl font-semibold mb-4 text-gray-800">🏅 Leaderboard</h2>
           {users
