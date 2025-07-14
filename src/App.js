@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { FaUserPlus, FaMedal } from "react-icons/fa";
+import { FaUserPlus } from "react-icons/fa";
 
 function App() {
   const [users, setUsers] = useState([]);
@@ -52,8 +52,11 @@ function App() {
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-50 to-green-100 flex items-center justify-center p-6">
       <div className="bg-white p-8 rounded-3xl shadow-2xl w-full max-w-xl border border-gray-200">
-        <h1 className="text-4xl font-extrabold text-center text-indigo-600 mb-8 flex items-center justify-center gap-2">
-          <FaMedal /> Leaderboard App
+        
+        {/* Header with Logo and Toppoints */}
+        <h1 className="text-4xl font-extrabold text-center text-indigo-600 mb-8 flex items-center justify-center gap-3">
+          <img src="/logo1.png" alt="Logo" className="w-10 h-10 rounded-full shadow-md" />
+          <span className="tracking-wide font-serif">Toppoints</span>
         </h1>
 
         {/* Add User Section */}
