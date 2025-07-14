@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { FaUserPlus } from "react-icons/fa";
+import { FaUserPlus, FaMedal } from "react-icons/fa";
 
 function App() {
   const [users, setUsers] = useState([]);
@@ -9,7 +9,7 @@ function App() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
-  const backend = "https://leaderboard-1-0jek.onrender.com/api"; // ✅ LIVE backend
+  const backend = "https://leaderboard-1-0jek.onrender.com/api";
 
   useEffect(() => {
     fetchUsers();
@@ -50,16 +50,22 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-50 to-green-100 flex items-center justify-center p-6">
-      <div className="bg-white p-8 rounded-3xl shadow-2xl w-full max-w-xl border border-gray-200">
-        
-        {/* Header with Logo and Toppoints */}
-        <h1 className="text-4xl font-extrabold text-center text-indigo-600 mb-8 flex items-center justify-center gap-3">
-          <img src="/logo1.png" alt="Logo" className="w-10 h-10 rounded-full shadow-md" />
-          <span className="tracking-wide font-serif">Toppoints</span>
+    <div className="min-h-screen bg-gradient-to-r from-blue-50 to-green-100 p-6 relative">
+
+      {/* ✅ LOGO + TopPointers OUTSIDE BOX - TOP LEFT */}
+      <div className="absolute top-6 left-6 flex items-center gap-2 z-10">
+        <img src="/logo1.png" alt="Logo" className="h-10 w-10" />
+        <span className="text-2xl font-bold text-gray-800">TopPointers</span>
+      </div>
+
+      {/* MAIN CARD BOX */}
+      <div className="bg-white mt-20 p-8 rounded-3xl shadow-2xl w-full max-w-xl mx-auto border border-gray-200">
+        {/* Centered Title */}
+        <h1 className="text-4xl font-extrabold text-center text-indigo-600 mb-8 flex items-center justify-center gap-2">
+          <FaMedal /> Leaderboard
         </h1>
 
-        {/* Add User Section */}
+        {/* Add User */}
         <div className="flex mb-4">
           <input
             value={newName}
