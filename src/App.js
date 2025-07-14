@@ -1,23 +1,130 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { FaUserPlus, FaMedal } from "react-icons/fa";
 
 function App() {
+  const [users, setUsers] = useState([]);
+  const [newName, setNewName] = useState("");
+  const [selectedUser, setSelectedUser] = useState("");
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+
+  const backend = "https://leaderboard-1-0jek.onrender.com/api"; // ✅ live Render backend
+
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const fetchUsers = async () => {
+    try {
+      const res = await axios.get(`${backend}/users`);
+      setUsers(res.data);
+      if (res.data.length > 0) setSelectedUser(res.data[0].name);
+    } catch (err) {
+      setError("⚠️ Failed to load users. Is backend running?");
+    }
+  };
+
+  const addUser = async () => {
+    if (!newName.trim()) return;
+    try {
+      await axios.post(`${backend}/users?name=${newName}`);
+      setMessage(`✅ Added user "${newName}" successfully!`);
+      setNewName("");
+      setError("");
+      fetchUsers();
+    } catch {
+      setError("❌ Could not add user. Try again.");
+    }
+  };
+
+  const claimPoints = async () => {
+    try {
+      const user = users.find((u) => u.name === selectedUser);
+      const res = await axios.post(`${backend}/users/${user.id}/claim`);
+      setMessage(`🎉 ${res.data.name} now has ${res.data.totalPoints} points!`);
+      setError("");
+      fetchUsers();
+    } catch {
+      setError("❌ Failed to claim points.");
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="min-h-screen bg-gradient-to-r from-blue-50 to-green-100 flex items-center justify-center p-6">
+      <div className="bg-white p-8 rounded-3xl shadow-2xl w-full max-w-xl border border-gray-200">
+        <h1 className="text-4xl font-extrabold text-center text-indigo-600 mb-8 flex items-center justify-center gap-2">
+          <FaMedal /> Leaderboard App
+        </h1>
+
+        {/* Add User Section */}
+        <div className="flex mb-4">
+          <input
+            value={newName}
+            onChange={(e) => setNewName(e.target.value)}
+            placeholder="Enter user name"
+            className="flex-1 border border-gray-300 rounded-l-lg px-4 py-2 outline-none text-gray-700"
+          />
+          <button
+            onClick={addUser}
+            className="bg-green-500 text-white px-5 rounded-r-lg hover:bg-green-600 flex items-center gap-1 transition"
+          >
+            <FaUserPlus /> Add
+          </button>
+        </div>
+
+        {/* Select User and Claim */}
+        <div className="flex mb-4">
+          <select
+            value={selectedUser}
+            onChange={(e) => setSelectedUser(e.target.value)}
+            className="flex-1 border border-gray-300 rounded-l-lg px-4 py-2 text-gray-700"
+          >
+            {users.map((user) => (
+              <option key={user.id} value={user.name}>
+                {user.name}
+              </option>
+            ))}
+          </select>
+          <button
+            onClick={claimPoints}
+            className="bg-blue-500 text-white px-5 rounded-r-lg hover:bg-blue-600 transition"
+          >
+            Claim
+          </button>
+        </div>
+
+        {/* Messages */}
+        {message && (
+          <div className="bg-green-100 text-green-800 px-4 py-2 rounded mb-4 text-sm shadow-inner font-medium">
+            {message}
+          </div>
+        )}
+        {error && (
+          <div className="bg-red-100 text-red-700 px-4 py-2 rounded mb-4 text-sm shadow-inner font-medium">
+            {error}
+          </div>
+        )}
+
+        {/* Leaderboard */}
+        <div>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-800">🏅 Leaderboard</h2>
+          {users
+            .sort((a, b) => b.totalPoints - a.totalPoints)
+            .map((user, index) => (
+              <div
+                key={user.id}
+                className="bg-gray-100 px-5 py-3 rounded-lg mb-2 flex justify-between items-center shadow-sm"
+              >
+                <span className="font-medium text-gray-700">
+                  #{index + 1} {user.name}
+                </span>
+                <span className="text-indigo-700 font-bold">{user.totalPoints} pts</span>
+              </div>
+            ))}
+        </div>
+      </div>
     </div>
   );
 }
